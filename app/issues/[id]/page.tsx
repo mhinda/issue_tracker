@@ -3,6 +3,7 @@ import prisma from '@/prisma/client'
 import { Flex, Heading, Text } from '@radix-ui/themes';
 import { Card } from '@radix-ui/themes';
 import { notFound } from 'next/navigation';
+import ReactMarkdown from 'react-markdown'
 import React from 'react'
 
 interface Props {
@@ -19,12 +20,11 @@ const IssueDetailPage = async ({ params }: Props) => {
   return (
     <div>
       <Heading>{issue.title}</Heading>
-      <Flex className='space-x-3' my="3">
+      <Flex gap="3" my="3">
         <IssueStatusBadge status={issue.status} />
         <Text>{issue.createdAt.toDateString()}</Text>
       </Flex>
-      <Card><p>{issue.description}</p></Card>
-      
+      <Card className='prose mt-4'><ReactMarkdown>{issue.description}</ReactMarkdown></Card>
     </div>
   )
 }
