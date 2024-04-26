@@ -22,7 +22,6 @@ type IssueFormData = z.infer<typeof issueSchema>;
 
 const IssueForm =  ({ issue }: { issue?: Issue }) => {
   const router = useRouter();
-  console.log(issue)
   const { register, control, handleSubmit, formState: { errors } } = useForm<IssueFormData>({
     resolver: zodResolver(issueSchema)
   })
