@@ -9,9 +9,16 @@ import { Issue, Status } from '@prisma/client'
 import { ArrowUpIcon, DoubleArrowLeftIcon } from '@radix-ui/react-icons'
 import Pagination from '../components/Pagination'
 
+interface Props {
+  searchParams: { 
+    status: Status, 
+    orderBy: keyof Issue,
+    page: string 
+  },
+
+}
 const IssuesPage = async (
-  { searchParams }: { searchParams: { status: Status, orderBy: keyof Issue },
-  }) => {
+  { searchParams }: Props) => {
   
   const columns: { 
     label: string, 
@@ -23,19 +30,29 @@ const IssuesPage = async (
     { label: 'Created At', value: 'created_at', className: 'hidden md:table-cell' }
   ]
   
+
   const statuses = Object.values(Status);
   const status = 
     statuses.includes(searchParams.status) ? 
     searchParams.status : undefined
 
+  const where = { status }
+  
   const orderBy = columns.map(column => column.value)
     .includes(searchParams.orderBy) ? 
     {[searchParams.orderBy]: 'asc'} : undefined
+
+  const page = parseInt(searchParams.page) || 1;
+  const pageSize = 4;
   
   const issues = await prisma.issue.findMany({
-    where: { status },
-    orderBy
+    where,
+    orderBy,
+    skip: (page - 1) * pageSize,
+    take: pageSize
   })
+
+  const issueCount = await prisma.issue.count({ where })
 
   return (
     <div>
@@ -69,7 +86,7 @@ const IssuesPage = async (
             </Table.Row>))}
         </Table.Body>
       </Table.Root>
-      <Pagination itemCount={1000} pageSize={10} currentPage={2} />
+      <Pagination itemCount={issueCount} pageSize={pageSize} currentPage={page} />
     </div>
   )
 }
