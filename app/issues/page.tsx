@@ -1,12 +1,13 @@
 import prisma from '@/prisma/client'
-import { Table } from '@radix-ui/themes'
+import { Button, Table } from '@radix-ui/themes'
 import React from 'react'
 import IssueStatusBadge from '../components/IssueStatusBadge'
 import IssueActions from './IssueActions'
 import Link from '../components/Link'
 import NextLink from 'next/link'
 import { Issue, Status } from '@prisma/client'
-import { ArrowUpIcon } from '@radix-ui/react-icons'
+import { ArrowUpIcon, DoubleArrowLeftIcon } from '@radix-ui/react-icons'
+import Pagination from '../components/Pagination'
 
 const IssuesPage = async (
   { searchParams }: { searchParams: { status: Status, orderBy: keyof Issue },
@@ -19,7 +20,7 @@ const IssuesPage = async (
    }[] = [
     { label: 'Issue', value: 'title' },
     { label: 'Status', value: 'status', className: 'hidden md:table-cell' },
-    { label: 'Created At', value: 'createdAt', className: 'hidden md:table-cell' }
+    { label: 'Created At', value: 'created_at', className: 'hidden md:table-cell' }
   ]
   
   const statuses = Object.values(Status);
@@ -64,10 +65,11 @@ const IssuesPage = async (
                 <div className='block md:hidden'><IssueStatusBadge status={issue.status} /></div>
               </Table.Cell>
               <Table.Cell className='hidden md:table-cell'><IssueStatusBadge status={issue.status} /></Table.Cell>
-              <Table.Cell className='hidden md:table-cell'>{issue.createdAt.toDateString()}</Table.Cell>
+              <Table.Cell className='hidden md:table-cell'>{issue.created_at.toDateString()}</Table.Cell>
             </Table.Row>))}
         </Table.Body>
       </Table.Root>
+      <Pagination itemCount={1000} pageSize={10} currentPage={2} />
     </div>
   )
 }
