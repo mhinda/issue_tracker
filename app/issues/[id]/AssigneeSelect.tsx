@@ -15,7 +15,7 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
   
   const assignIssue = async (userId: string) => {
           await axios.patch(
-            `/zapi/issues/${issue.id}`, 
+            `/api/issues/${issue.id}`, 
             (userId == 'unassigned')?  {userId: null} : { userId })
             .catch((error) => toast.error('Changes could not be saved'))
           ; }

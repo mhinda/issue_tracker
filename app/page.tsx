@@ -1,6 +1,7 @@
+import LatestIssues from "./LatestIssues";
+
 export default function Home() {
   return (
-    <h1>Hello Word</h1>
-    
+    <LatestIssues />    
   );
 }
